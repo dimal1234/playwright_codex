@@ -9,13 +9,15 @@ export class ProductsPage {
     this.searchedProductsHeading = page.getByRole('heading', { name: /searched products/i });
     this.productCards = page.locator('.features_items .product-image-wrapper');
     this.productNames = page.locator('.features_items .productinfo p');
-    this.viewCartLink = page.getByRole('link', { name: /view cart/i });
+    this.cartModal = page.locator('#cartModal');
+    this.viewCartLink = this.cartModal.getByRole('link', { name: /view cart/i });
   }
 
   async expectLoaded() {
     await expect(this.page).toHaveURL(/\/products/);
     await expect(this.heading).toBeVisible();
     await expect(this.productCards.first()).toBeVisible();
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   async searchFor(term) {
@@ -29,13 +31,15 @@ export class ProductsPage {
   }
 
   async addFirstProductToCart() {
-    await this.productCards.first().scrollIntoViewIfNeeded();
-    await this.productCards.first().hover();
-    await this.productCards.first().locator('.add-to-cart').first().click();
+    const firstProduct = this.productCards.first();
+
+    await firstProduct.scrollIntoViewIfNeeded();
+    await firstProduct.locator('.productinfo .add-to-cart').click();
   }
 
   async expectProductAddedModal() {
-    await expect(this.page.locator('.modal-content')).toContainText('Added!');
+    await expect(this.cartModal).toBeVisible();
+    await expect(this.cartModal).toContainText('Added!');
     await expect(this.viewCartLink).toBeVisible();
   }
 }

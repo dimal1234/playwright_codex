@@ -172,4 +172,3 @@ These folders are ignored by Git through `.gitignore`.
 - UI tests run against the public Automation Exercise site, so internet access is required.
 - Signup tests create a unique customer account and delete it at the end of the test.
 - The framework blocks common third-party ad routes in page objects where needed to keep UI tests stable.
-- Entire framework created and run via OpenAI - Codex agent.
